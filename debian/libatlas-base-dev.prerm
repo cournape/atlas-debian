@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+# if [ "$1" != "upgrade" ]
+# then
+#     update-alternatives --remove libblas-3.so /usr/lib/atlas/libblas.so
+#     update-alternatives --remove liblapack-3.so /usr/lib/atlas/liblapack.so
+# fi
+
+#DEBHELPER#
+
+exit 0

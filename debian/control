@@ -1,0 +1,399 @@
+Source: atlas
+Section: devel
+Priority: optional
+Maintainer: Debian Scientific Computing Team <pkg-scicomp-devel@lists.alioth.debian.org>
+Uploaders: Camm Maguire <camm@enhanced.com>, Ondrej Certik 
+ <ondrej@certik.cz>, Sylvestre Ledru <sylvestre.ledru@inria.fr>
+Standards-Version: 3.8.0
+Build-Depends: expect, debhelper (>=4.1.16), patch, gfortran, gfortran-4.3, libblas-dev, sharutils, liblapack-dev, liblapack-pic, libblas-test, help2man, devscripts, dpatch, cdbs
+Homepage: http://math-atlas.sourceforge.net/
+Vcs-Svn: svn://svn.debian.org/svn/pkg-scicomp/atlas/
+Vcs-Browser: http://svn.debian.org/viewsvn/pkg-scicomp/atlas/
+DM-Upload-Allowed: yes
+
+Package: libatlas3gf-base
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Provides: libatlas.so.3gf, libblas.so.3gf, liblapack.so.3gf
+Conflicts: atlas2 (<< 3.2.1-1)
+Replaces: atlas2 (<< 3.2.1-1)
+Suggests: ${libs:Suggests}, libblas3gf, liblapack3gf
+Description: Automatically Tuned Linear Algebra Software,generic shared
+ ATLAS is an approach for the automatic generation and optimization of
+ numerical software. Currently ATLAS supplies optimized versions for the
+ complete set of linear algebra kernels known as the Basic Linear Algebra
+ Subroutines (BLAS), and a subset of the linear algebra routines in the
+ LAPACK library.
+ .
+ The libraries in this package are built without any processor extension
+ instructions, and should run on all processors of this general
+ architecture, albeit less than optimally.  
+ . 
+ On some architectures, multiple binary packages are provided to take
+ advantage of certain commonly available processor instruction set
+ extensions.  The instruction extension set used is indicated in the
+ package name, with 'base' denoting no extensions. In general, you
+ will obtain the best performance by installing the package with the
+ most advanced instruction extension set your machine is capable of
+ running.
+
+Package: libatlas-base-dev
+Architecture: any
+Depends: libatlas3gf-base, libatlas-headers
+Provides: libatlas-3gf.so, libblas-3gf.so, liblapack-3gf.so
+Conflicts: atlas2-dev (<< 3.2.1-3), atlas2-base-dev, libatlas-3.so
+Replaces: atlas2-dev (<< 3.2.1-3), atlas2-base-dev, libatlas-3.so
+Suggests: libblas-doc, liblapack-doc
+Section: libdevel
+Description: Automatically Tuned Linear Algebra Software,generic static
+ ATLAS is an approach for the automatic generation and optimization of
+ numerical software. Currently ATLAS supplies optimized versions for the
+ complete set of linear algebra kernels known as the Basic Linear Algebra
+ Subroutines (BLAS), and a subset of the linear algebra routines in the
+ LAPACK library.
+ .
+ This package includes the static libraries and symbolic links
+ needed for program development.
+
+Package: libatlas-headers
+Architecture: all
+Depends: libc6-dev, libblas-dev
+Conflicts: atlas-dev, atlas2-dev (<< 3.2.1-3), atlas2-headers, atlas3-headers
+Replaces: atlas2-dev (<< 3.2.1-3), atlas2-headers, atlas3-headers
+Suggests: liblapack-dev, liblapack-doc
+Description: Automatically Tuned Linear Algebra Software,C header files
+ ATLAS is an approach for the automatic generation and optimization of
+ numerical software. Currently ATLAS supplies optimized versions for the
+ complete set of linear algebra kernels known as the Basic Linear Algebra
+ Subroutines (BLAS), and a subset of the linear algebra routines in the
+ LAPACK library.
+ .
+ This package provides the headers needed to compile against the libraries
+ provided by ATLAS.
+
+# Package: libatlas-test
+# Priority: extra
+# Architecture: any
+# Replaces: atlas-test, atlas3-test
+# Depends: ${shlibs:Depends}, ${misc:Depends}
+# Recommends: libblas3gf, liblapack3gf
+# Description: Automatically Tuned Linear Algebra Software,test programs
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  This package provides dynamically linked testing and bench-marking
+#  binaries to compare the blas and atlas libraries on your system.
+# 
+# Package: libatlas-doc
+# Section: doc
+# Conflicts: atlas-doc, atlas3-doc
+# Replaces: atlas-doc, atlas3-doc
+# Architecture: all
+# Description: Automatically Tuned Linear Algebra Software,documentation
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  This package provides documentation on the atlas libraries useful for
+#  developers.
+# 
+# Package: libatlas3gf-ev6
+# Section: libs
+# Architecture: alpha
+# Depends: ${shlibs:Depends}, ${misc:Depends}
+# Provides: libatlas.so.3gf, libblas.so.3gf, liblapack.so.3gf
+# Suggests: libblas3gf, liblapack3gf
+# Description: Automatically Tuned Linear Algebra Software,EV6 shared
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  These libraries use the hand-tuned assembler kernels that run on  
+#  EV6 and later procesors.
+#  .
+#  On some architectures, multiple binary packages are provided to take
+#  advantage of certain commonly available processor instruction set
+#  extensions.  The instruction extension set used is indicated in the
+#  package name, with 'base' denoting no extensions. In general, you
+#  will obtain the best performance by installing the package with the
+#  most advanced instruction extension set your machine is capable of
+#  running.
+# 
+# Package: libatlas-ev6-dev
+# Architecture: alpha
+# Conflicts: atlas2-ev6-dev, atlas3-ev6-dev
+# Replaces: atlas2-ev6-dev, atlas3-ev6-dev
+# Provides: libatlas-3gf.so, libblas-3gf.so, liblapack-3gf.so
+# Depends: libatlas3gf-ev6, libatlas-headers
+# Suggests: libblas-doc, liblapack-doc
+# Section: libdevel
+# Description: Automatically Tuned Linear Algebra Software,EV6 static
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  This package includes the static libraries and symbolic links
+#  needed for program development.
+# 
+# Package: libatlas3gf-2.0
+# Section: libs
+# Architecture: hppa
+# Depends: ${shlibs:Depends}, ${misc:Depends}
+# Provides: libatlas.so.3gf, libblas.so.3gf, liblapack.so.3gf
+# Suggests: libblas3gf, liblapack3gf
+# Description: Automatically Tuned Linear Algebra Software,2.0 shared
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  These libraries use the hand-tuned assembler kernels that run on  
+#  2.0 and later procesors.
+#  .
+#  On some architectures, multiple binary packages are provided to take
+#  advantage of certain commonly available processor instruction set
+#  extensions.  The instruction extension set used is indicated in the
+#  package name, with 'base' denoting no extensions. In general, you
+#  will obtain the best performance by installing the package with the
+#  most advanced instruction extension set your machine is capable of
+#  running.
+# 
+# Package: libatlas-2.0-dev
+# Architecture: hppa
+# Conflicts: atlas2-2.0-dev, atlas3-2.0-dev
+# Replaces: atlas2-2.0-dev, atlas3-2.0-dev
+# Provides: libatlas-3gf.so, libblas-3gf.so, liblapack-3gf.so
+# Depends: libatlas3gf-2.0, libatlas-headers
+# Suggests: libblas-doc, liblapack-doc
+# Section: libdevel
+# Description: Automatically Tuned Linear Algebra Software,2.0 static
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  This package includes the static libraries and symbolic links
+#  needed for program development.
+# 
+# Package: libatlas3gf-sse
+# Section: libs
+# Architecture: i386 kfreebsd-i386 hurd-i386
+# Depends: ${shlibs:Depends}, ${misc:Depends}
+# Provides: libatlas.so.3gf, libblas.so.3gf, liblapack.so.3gf
+# Suggests: libatlas3gf-sse2, libblas3gf, liblapack3gf
+# Description: Automatically Tuned Linear Algebra Software,SSE1 shared 
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  These libraries use the SSE1 extensions only available on Pentium III
+#  and later processors.
+#  .
+#  On some architectures, multiple binary packages are provided to take
+#  advantage of certain commonly available processor instruction set
+#  extensions.  The instruction extension set used is indicated in the
+#  package name, with 'base' denoting no extensions. In general, you
+#  will obtain the best performance by installing the package with the
+#  most advanced instruction extension set your machine is capable of
+#  running.
+# 
+# Package: libatlas-sse-dev
+# Architecture: i386 kfreebsd-i386 hurd-i386
+# Depends: libatlas3gf-sse, libatlas-headers
+# Provides: libatlas-3gf.so, libblas-3gf.so, liblapack-3gf.so
+# Conflicts: atlas2-sse-dev, atlas3-sse-dev
+# Replaces: atlas2-sse-dev, atlas4-sse-dev
+# Suggests: libblas-doc, liblapack-doc
+# Section: libdevel
+# Description: Automatically Tuned Linear Algebra Software,SSE1 static  
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  This package includes the static libraries and symbolic links
+#  needed for program development.
+# 
+# Package: libatlas3gf-sse2
+# Section: libs
+# Architecture: i386 kfreebsd-i386 hurd-i386
+# Depends: ${shlibs:Depends}, ${misc:Depends}
+# Provides: libatlas.so.3gf, libblas.so.3gf, liblapack.so.3gf
+# Suggests: libblas3gf, liblapack3gf
+# Description: Automatically Tuned Linear Algebra Software,SSE2 shared 
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  These libraries use the SSE2 extensions only available on Pentium IV
+#  and later processors.
+#  .
+#  On some architectures, multiple binary packages are provided to take
+#  advantage of certain commonly available processor instruction set
+#  extensions.  The instruction extension set used is indicated in the
+#  package name, with 'base' denoting no extensions. In general, you
+#  will obtain the best performance by installing the package with the
+#  most advanced instruction extension set your machine is capable of
+#  running.
+# 
+# Package: libatlas-sse2-dev
+# Architecture: i386 kfreebsd-i386 hurd-i386
+# Depends: libatlas3gf-sse2, libatlas-headers
+# Provides: libatlas-3gf.so, libblas-3gf.so, liblapack-3gf.so
+# Conflicts: atlas2-sse2-dev, atlas3-sse2-dev
+# Replaces: atlas2-sse2-dev, atlas3-sse2-dev
+# Suggests: libblas-doc, liblapack-doc
+# Section: libdevel
+# Description: Automatically Tuned Linear Algebra Software,SSE2 static 
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  This package includes the static libraries and symbolic links
+#  needed for program development.
+# 
+# Package: libatlas3gf-3dnow
+# Section: libs
+# Architecture: i386 kfreebsd-i386 hurd-i386
+# Depends: ${shlibs:Depends}, ${misc:Depends}
+# Provides: libatlas.so.3gf, libblas.so.3gf, liblapack.so.3gf
+# Suggests: libblas3gf, liblapack3gf
+# Description: Automatically Tuned Linear Algebra Software,3dnow shared
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  These libraries use the 3dnow extensions only available on AMD
+#  3dnow and later processors.  Please note that the floating point
+#  produced by these extensions is not IEEE compliant.
+#  .
+#  On some architectures, multiple binary packages are provided to take
+#  advantage of certain commonly available processor instruction set
+#  extensions.  The instruction extension set used is indicated in the
+#  package name, with 'base' denoting no extensions. In general, you
+#  will obtain the best performance by installing the package with the
+#  most advanced instruction extension set your machine is capable of
+#  running.
+# 
+# Package: libatlas-3dnow-dev
+# Architecture: i386 kfreebsd-i386 hurd-i386
+# Provides: libatlas-3gf.so, libblas-3gf.so, liblapack-3gf.so
+# Conflicts: atlas2-3dnow-dev, atlas3-3dnow-dev
+# Replaces: atlas2-3dnow-dev, atlas3-3dnow-dev
+# Depends: libatlas3gf-3dnow, libatlas-headers
+# Suggests: libblas-doc, liblapack-doc
+# Section: libdevel
+# Description: Automatically Tuned Linear Algebra Software,3dnow static
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  This package includes the static libraries and symbolic links
+#  needed for program development.
+# 
+# Package: libatlas3gf-altivec
+# Section: libs
+# Architecture: powerpc
+# Depends: ${shlibs:Depends}, ${misc:Depends}
+# Provides: libatlas.so.3gf, libblas.so.3gf, liblapack.so.3gf
+# Suggests: libblas3gf, liblapack3gf
+# Description: Automatically Tuned Linear Algebra Software,altivec shared
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  These libraries use the hand-tuned assembler kernels that run on  
+#  ALTIVEC and later procesors.
+#  .
+#  On some architectures, multiple binary packages are provided to take
+#  advantage of certain commonly available processor instruction set
+#  extensions.  The instruction extension set used is indicated in the
+#  package name, with 'base' denoting no extensions. In general, you
+#  will obtain the best performance by installing the package with the
+#  most advanced instruction extension set your machine is capable of
+#  running.
+# 
+# Package: libatlas-altivec-dev
+# Architecture: powerpc
+# Conflicts: atlas2-altivec-dev, atlas3-altivec-dev
+# Replaces: atlas2-altivec-dev, atlas3-altivec-dev
+# Provides: libatlas-3gf.so, libblas-3gf.so, liblapack-3gf.so
+# Depends: libatlas3gf-altivec, libatlas-headers
+# Suggests: libblas-doc, liblapack-doc
+# Section: libdevel
+# Description: Automatically Tuned Linear Algebra Software,altivec static
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  This package includes the static libraries and symbolic links
+#  needed for program development.
+# 
+# Package: libatlas3gf-v9
+# Section: libs
+# Architecture: sparc
+# Depends: ${shlibs:Depends}, ${misc:Depends}
+# Provides: libatlas.so.3gf, libblas.so.3gf, liblapack.so.3gf
+# Suggests: libblas3gf, liblapack3gf
+# Description: Automatically Tuned Linear Algebra Software,v9 shared
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  These libraries use the hand-tuned assembler kernels that run on  
+#  V9 and later procesors.
+#  .
+#  On some architectures, multiple binary packages are provided to take
+#  advantage of certain commonly available processor instruction set
+#  extensions.  The instruction extension set used is indicated in the
+#  package name, with 'base' denoting no extensions. In general, you
+#  will obtain the best performance by installing the package with the
+#  most advanced instruction extension set your machine is capable of
+#  running.
+# 
+# Package: libatlas-v9-dev
+# Architecture: sparc
+# Conflicts: atlas2-v9-dev, atlas3-v9-dev
+# Replaces: atlas2-v9-dev, atlas3-v9-dev
+# Provides: libatlas-3gf.so, libblas-3gf.so, liblapack-3gf.so
+# Depends: libatlas3gf-v9, libatlas-headers
+# Suggests: libblas-doc, liblapack-doc
+# Section: libdevel
+# Description: Automatically Tuned Linear Algebra Software,v9 static
+#  ATLAS is an approach for the automatic generation and optimization of
+#  numerical software. Currently ATLAS supplies optimized versions for the
+#  complete set of linear algebra kernels known as the Basic Linear Algebra
+#  Subroutines (BLAS), and a subset of the linear algebra routines in the
+#  LAPACK library.
+#  .
+#  This package includes the static libraries and symbolic links
+#  needed for program development.

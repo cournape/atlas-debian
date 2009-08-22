@@ -1,0 +1,215 @@
+#!/usr/bin/make -f
+#-*- makefile -*-
+# Made with the aid of dh_make, by Craig Small
+# Sample debian/rules that uses debhelper. GNU copyright 1997 by Joey Hess.
+# This version is for a hypothetical package that builds an
+# architecture-dependant package, as well as an architecture-independant
+# package.
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/dpatch/dpatch.make
+
+package=atlas
+
+version=$(shell expr `pwd` : '.*-\([0-9.]*\)')
+version_major=$(shell expr `pwd` : '.*-\([0-9]*\).[0-9.]*')
+
+SO=3gf
+MIN=0
+VER=$(SO).$(MIN)
+
+BLAS_VER:=1.2
+LAPACK_VER:=3.0
+ATLAS_VER:=3.8.3
+
+BDIR:=blas-$(BLAS_VER)
+LDIR:=lapack-$(LAPACK_VER)
+
+F77=gfortran
+
+# Uncomment this to turn on verbose mode. 
+#export DH_VERBOSE=1
+
+# This is the debhelper compatability version to use.
+# Now in debian/compat
+#export DH_COMPAT=2
+
+ARCHT:=$(shell echo $$(dpkg-architecture -qDEB_HOST_ARCH_CPU))
+#SA:=$(notdir $(wildcard debian/$(ARCHT)/*))
+SA:=base
+
+BUILD:=BUILD
+BUILDDIR:=$(BUILD)-$(ARCHT)
+
+# TODO: native vs base
+MY_ISA=base
+
+LBS:=$(addsuffix /libatlas,$(SA)) \
+	$(addsuffix /libcblas,$(SA)) \
+	$(addsuffix /libf77blas,$(SA)) \
+	$(addsuffix /liblapack_atlas,$(SA)) 
+
+LBS:=$(subst base/,,$(LBS))
+
+LIBS:=$(addsuffix .a,$(LBS)) \
+	$(addsuffix .so.$(VER),$(LBS)) \
+	$(addsuffix .so.$(SO),$(LBS)) \
+	$(addsuffix .so,$(LBS))
+
+ILIBS:=$(addprefix debian/tmp/usr/lib/,$(LIBS))
+
+preparebuild.status:
+	dh_testdir
+
+# Get the gfortran runtime path since atlas configure get it wrong when we call
+# it from make
+F77SYSLIB:=-L$(shell dirname `$(F77) -print-file-name=libgfortran.so`) -lgfortran
+
+#
+# Configure stage
+#
+$(BUILDDIR)-%-shared/configure: debian/$(ARCHT)/%/ patch
+	dh_testdir
+	mkdir -p $(BUILDDIR)-$*-shared
+	if test "$*" = "base"; then \
+		cd $(BUILDDIR)-$*-shared && \
+			sh ../configure `cat ../debian/$(ARCHT)/$*/configure_opt` \
+			-Fa alg -fPIC \
+			--prefix="$(DEB_DESTDIR)" \
+			--incdir="$(DEB_DESTDIR)/usr/include" \
+			--libdir="$(DEB_DESTDIR)/usr/lib"; \
+	else \
+		cd $(BUILDDIR)-$*-shared && \
+			sh ../configure `cat ../debian/$(ARCHT)/$*/configure_opt` \
+			-Fa alg -fPIC \
+			--prefix="$(DEB_DESTDIR)" \
+			--incdir="$(DEB_DESTDIR)/usr/include" \
+			--libdir="$(DEB_DESTDIR)/usr/lib/$*"; \
+	fi;
+	sed -i -e "s|F77SYSLIB.*|F77SYSLIB\ =\ $(F77SYSLIB)|g" $(BUILDDIR)-$*-shared/Make.inc
+
+$(BUILDDIR)-%-static/configure: debian/$(ARCHT)/%/ patch
+	dh_testdir
+	mkdir -p $(BUILDDIR)-$*-static
+	if test "$*" = "base"; then \
+		cd $(BUILDDIR)-$*-static && \
+			sh ../configure `cat ../debian/$(ARCHT)/$*/configure_opt` \
+			--prefix="$(DEB_DESTDIR)" \
+			--libdir="$(DEB_DESTDIR)/usr/lib" \
+			--incdir="$(DEB_DESTDIR)/usr/include"; \
+	else \
+		cd $(BUILDDIR)-$*-static && \
+			sh ../configure `cat ../debian/$(ARCHT)/$*/configure_opt` \
+			--prefix="$(DEB_DESTDIR)" \
+			--libdir="$(DEB_DESTDIR)/usr/lib/$*" \
+			--incdir="$(DEB_DESTDIR)/usr/include"; \
+	fi;
+
+configure: configure-stamp
+
+configure-stamp:
+	for a in PII32; do \
+		cp debian/ARCHS/$$a.tgz.uu CONFIG/ARCHS; \
+		(cd CONFIG/ARCHS && uudecode $$a.tgz.uu); \
+	done;
+	@for arch in $(SA); do \
+		$(MAKE) -f ./debian/rules $(BUILDDIR)-$$arch-static/configure; \
+	done
+	touch $@
+
+#
+# Build stage
+#
+build-arch: build-arch-stamp
+
+build-arch-stamp: configure-stamp
+	dh_testdir
+	for arch in $(SA); do \
+		(cd $(BUILDDIR)-$$arch-static && make);  \
+	done
+	touch $@
+
+build: build-arch
+
+#
+# Install targets
+#
+install: install-arch
+
+install-arch: install-arch-stamp
+
+install-arch-stamp: build 
+	dh_testdir
+	dh_testroot
+	dh_clean -k -i 
+	dh_installdirs -i
+	for arch in $(SA); do \
+		(cd $(BUILDDIR)-$$arch-static); \
+	done
+	touch $@
+
+
+
+# XXX: Build architecture-independent files here.
+binary-indep: install
+	dh_testdir -i
+	dh_testroot -i
+	dh_installdocs -i
+	#mv debian/libatlas-doc/usr/share/doc/libatlas-doc/ChangeLog debian/libatlas-doc/usr/share/doc/libatlas-doc/changelog
+	dh_installexamples -i
+	dh_installinfo -i
+	dh_installdebconf -i
+	dh_installchangelogs -i 
+	dh_strip -i
+	dh_link -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_shlibdeps -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
+
+# Build architecture-dependent files here.
+binary-arch: install
+	dh_testdir -s
+	dh_testroot -s
+	dh_installdocs -s
+	dh_installexamples -s
+	dh_installinfo -s
+	dh_installdebconf -s
+	#dh_installman debian/*.1 -plibatlas-test
+	dh_installchangelogs -s 
+	dh_strip -s
+	dh_link -s
+	dh_compress -s
+	dh_fixperms -s
+	dh_makeshlibs -s
+	#chmod +x debian/fixshlibs1 && debian/fixshlibs1
+	dh_installdeb -s
+	#dh_shlibdeps -s -Llibatlas3gf-base -l$$(pwd)/$(BDIR):$$(pwd)/$(LDIR):debian/libatlas3gf-base/usr/lib
+	#for i in $(SA); do dh_shlibdeps -p libatlas3gf-$$i -Llibatlas3gf-$$i -l$$(pwd)/$(BDIR):$$(pwd)/$(LDIR):debian/libatlas3gf-$$i/usr/lib/$$i:debian/libatlas3gf-$$i/usr/lib ; done
+	chmod +x debian/fixshlibs && debian/fixshlibs
+	#dh_gencontrol -s -u"-Vlibs:Suggests=$$(echo $(addprefix libatlas3gf-,$(filter-out base,$(SA))) | sed 's/ /,/g')"
+	dh_gencontrol -s
+	dh_md5sums -s
+	dh_builddeb -s
+
+clean:: clean-patched unpatch
+
+clean-patched:
+	dh_testdir
+	dh_testroot
+	for arch in $(SA); do \
+		rm -rf $(BUILDDIR)-$$arch-static; \
+		rm -rf $(BUILDDIR)-$$arch-shared; \
+	done
+	rm -f configure-stamp
+	rm -f build-stamp
+	rm -f build-arch-stamp
+	rm -f install-arch-stamp
+	rm -rf tmp
+	rm -rf debian/tmp
+
+binary:  binary-arch binary-indep 
+.PHONY: binary-arch binary build install libatlas3gf-base libatlas-base-dev custom 
