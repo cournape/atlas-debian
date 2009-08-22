@@ -1,3 +1,4 @@
 01_force_kernel_failure.dpatch
 02_rename_lapack_atlas.dpatch
 03_full_blas_lapack.dpatch
+04_static_install_target.dpatch

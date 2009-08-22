@@ -144,7 +144,7 @@ install-arch-stamp: build
 	dh_clean -k -i 
 	dh_installdirs -i
 	for arch in $(SA); do \
-		(cd $(BUILDDIR)-$$arch-static); \
+		(cd $(BUILDDIR)-$$arch-static && make install); \
 	done
 	touch $@
 

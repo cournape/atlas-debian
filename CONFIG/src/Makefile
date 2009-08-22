@@ -364,7 +364,10 @@ $(INCINSTdir)/atlas :
 $(LIBINSTdir) :
 	mkdir -p $(LIBINSTdir)
 	chmod 0755 $(LIBINSTdir)
-install : $(INCINSTdir) $(LIBINSTdir) $(INCINSTdir)/atlas
+$(LIBINSTdir)/atlas :
+	mkdir -p $(LIBINSTdir)/atlas
+	chmod 0755 $(LIBINSTdir)/atlas
+install : $(INCINSTdir) $(LIBINSTdir) $(INCINSTdir)/atlas $(LIBINSTdir)/atlas
 	$(MAKE) -f Make.top install_inc INSTdir=$(INCINSTdir) 
 	$(MAKE) -f Make.top install_lib INSTdir=$(LIBINSTdir)
 
