@@ -1,0 +1,107 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 02_rename_lapack_atlas.dpatch.dpatch by  <david@evans>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Rename ATLAS incomplete lapack to lapack_atlas.
+
+@DPATCH@
+
+diff --git a/CONFIG/src/SpewMakeInc.c b/CONFIG/src/SpewMakeInc.c
+index 2fb5c15..67e40fd 100644
+--- a/CONFIG/src/SpewMakeInc.c
++++ b/CONFIG/src/SpewMakeInc.c
+@@ -532,7 +532,7 @@ main(int nargs, char **args)
+       fprintf(fpout, "   PTCBLASlib = $(LIBdir)/libptcblas.a\n");
+       fprintf(fpout, "   PTF77BLASlib = $(LIBdir)/libptf77blas.a\n");
+    }
+-   fprintf(fpout, "   LAPACKlib = $(LIBdir)/liblapack.a\n");
++   fprintf(fpout, "   LAPACKlib = $(LIBdir)/liblapack_atlas.a\n");
+    fprintf(fpout, "   TESTlib = $(LIBdir)/libtstatlas.a\n\n");
+ 
+    fprintf(fpout, "#  -------------------------------------------\n");
+diff --git a/Make.top b/Make.top
+index 7e99f4d..4e0e89a 100644
+--- a/Make.top
++++ b/Make.top
+@@ -291,8 +291,8 @@ install_inc:
+ install_lib:
+ 	cp $(LIBdir)/libatlas.a $(INSTdir)/.
+ 	cp $(LIBdir)/libcblas.a $(INSTdir)/.
+-	cp $(LIBdir)/liblapack.a $(INSTdir)/.
+-	chmod 0644 $(INSTdir)/libatlas.a  $(INSTdir)/liblapack.a \
++	cp $(LIBdir)/liblapack_atlas.a $(INSTdir)/.
++	chmod 0644 $(INSTdir)/libatlas.a  $(INSTdir)/liblapack_atlas.a \
+                    $(INSTdir)/libcblas.a 
+ 	- cp $(LIBdir)/libf77blas.a $(INSTdir)/.
+ 	- chmod 0644 $(INSTdir)/libf77blas.a
+diff --git a/makes/Make.lib b/makes/Make.lib
+index e9679d0..bd645dc 100644
+--- a/makes/Make.lib
++++ b/makes/Make.lib
+@@ -23,7 +23,7 @@ $(tarnam).tgz :
+ 	cp $(LIBdir)/libatlas.a $(ARCH)/lib/.
+ 	cp $(LIBdir)/libf77blas.a $(ARCH)/lib/.
+ 	cp $(LIBdir)/libcblas.a $(ARCH)/lib/.
+-	cp $(LIBdir)/liblapack.a $(ARCH)/lib/.
++	cp $(LIBdir)/liblapack_atlas.a $(ARCH)/lib/.
+ 	- cp $(LIBdir)/libptcblas.a $(ARCH)/lib/.
+ 	- cp $(LIBdir)/libptf77blas.a $(ARCH)/lib/.
+ 	$(TAR) cf $(tarnam).tar $(ARCH)
+@@ -48,12 +48,12 @@ cshared :
+ libatlas.so : libatlas.a
+ 	ld $(LDFLAGS) -shared -soname libatlas.so -o libatlas.so \
+         --whole-archive libatlas.a --no-whole-archive -lc $(LIBS)
+-liblapack.so : liblapack.a
++liblapack.so : liblapack_atlas.a
+ 	ld $(LDFLAGS) -shared -soname $@ -o $@ --whole-archive \
+-           liblapack.a --no-whole-archive $(F77SYSLIB)
+-libclapack.so : libclapack.a
++           liblapack_atlas.a --no-whole-archive $(F77SYSLIB)
++libclapack.so : libclapack_atlas.a
+ 	ld $(LDFLAGS) -shared -soname liblapack.so -o liblapack.so \
+-           --whole-archive libclapack.a
++           --whole-archive libclapack_atlas.a
+ libptf77blas.so : libptf77blas.a
+ 	ld $(LDFLAGS) -shared -soname $@ -o $@ --whole-archive libptf77blas.a \
+            --no-whole-archive $(F77SYSLIB)
+@@ -69,30 +69,30 @@ libcblas.so : libcblas.a
+ #
+ fat_ptshared :                              # threaded target
+ 	ld $(LDFLAGS) -shared -soname libatlas.so -o libatlas.so \
+-        --whole-archive liblapack.a libptf77blas.a libptcblas.a libatlas.a \
++        --whole-archive liblapack_atlas.a libptf77blas.a libptcblas.a libatlas.a \
+            --no-whole-archive -lc $(F77SYSLIB) $(LIBS)
+ fat_shared :                                # unthreaded target
+ 	ld $(LDFLAGS) -shared -soname libatlas.so -o libatlas.so \
+-        --whole-archive liblapack.a libf77blas.a libcblas.a libatlas.a \
++        --whole-archive liblapack_atlas.a libf77blas.a libcblas.a libatlas.a \
+            --no-whole-archive -lc $(F77SYSLIB) $(LIBS)
+ #
+ # Builds shared lib, not include fortran codes from LAPACK
+ #
+-fat_cptshared : libclapack.a                # threaded target
++fat_cptshared : libclapack_atlas.a                # threaded target
+ 	ld $(LDFLAGS) -shared -soname libcatlas.so -o libcatlas.so \
+-        --whole-archive libclapack.a libptcblas.a libatlas.a \
++        --whole-archive libclapack_atlas.a libptcblas.a libatlas.a \
+         --no-whole-archive -lc $(LIBS)
+-fat_cshared : libclapack.a                  # unthreaded target
++fat_cshared : libclapack_atlas.a                  # unthreaded target
+ 	ld $(LDFLAGS) -shared -soname libcatlas.so -o libcatlas.so \
+-        --whole-archive libclapack.a libcblas.a libatlas.a \
++        --whole-archive libclapack_atlas.a libcblas.a libatlas.a \
+         --no-whole-archive -lc $(LIBS)
+ 
+-libclapack.a : liblapack.a
+-	rm -rf clapack libclapack.a
++libclapack_atlas.a : liblapack_atlas.a
++	rm -rf clapack libclapack_atlas.a
+ 	mkdir clapack
+-	cd clapack ; ar x ../liblapack.a
++	cd clapack ; ar x ../liblapack_atlas.a
+ 	rm -f clapack/*f77wrap* 
+-	ar r libclapack.a clapack/ATL_* clapack/clapack_*
++	ar r libclapack_atlas.a clapack/ATL_* clapack/clapack_*
+ 	rm -rf clapack
+ xtst_lp: $(DYNlibs)
+ 	$(ICC) $(CDEFS) -o $@ $(mySRCdir)/qr.c $(DYNlibs) -Wl,--rpath ./

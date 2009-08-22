@@ -1,1 +1,2 @@
 01_force_kernel_failure.dpatch
+02_rename_lapack_atlas.dpatch
