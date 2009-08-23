@@ -1,9 +1,10 @@
-atlas (3.8.3-1) UNRELEASED; urgency=low
+atlas (3.8.3-1) unstable; urgency=low
 
   [ David Cournapeau ]
   * Start working on new build for ATLAS, based on 3.8.3.
+  * 32 bits arch support: nosse, sse and sse2 should work.
 
- -- David Cournapeau <david@ar.media.kyoto-u.ac.jp>  Fri, 21 Aug 2009 16:02:40 -0700
+ -- David Cournapeau <david@ar.media.kyoto-u.ac.jp>  Sun, 23 Aug 2009 11:53:52 -0700
 
 atlas (3.6.0-24) unstable; urgency=low
 
