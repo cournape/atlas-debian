@@ -9,24 +9,9 @@ if [ "$1" = "configure" ] ; then
     if [ $(awk 'END {print NR}' /etc/ld.so.conf.d/atlas.conf) != $(cat /etc/ld.so.conf.d/atlas.conf | wc -l) ] ; then
 	echo >> /etc/ld.so.conf.d/atlas.conf
     fi
-    if grep ^flags /proc/cpuinfo | grep -q xmm ||
-	grep ^flags /proc/cpuinfo | grep -q "\<sse\>"; then
-	if ! grep -q '^/usr/lib/sse$' /etc/ld.so.conf.d/atlas.conf ; then
-	    awk '/^\/usr\/lib\/atlas(\/3dnow)?$/ {if (!i) {print "/usr/lib/sse";i=1}}
-		{print}
-		END {if (!i) {print "/usr/lib/sse"}}' \
-		    /etc/ld.so.conf.d/atlas.conf > /etc/ld.so.conf.d/atlas.conf-atlas-tmp
-	    chmod 0644 /etc/ld.so.conf.d/atlas.conf-atlas-tmp
-	    mv /etc/ld.so.conf.d/atlas.conf-atlas-tmp /etc/ld.so.conf.d/atlas.conf
-	fi
-	if ! grep -q '"^/usr/lib/sse/atlas$' /etc/ld.so.conf.d/atlas.conf ; then
-	    awk '/^\/usr\/lib\/sse$/ {print "/usr/lib/sse/atlas";}
-		{print}' \
-		    /etc/ld.so.conf.d/atlas.conf > /etc/ld.so.conf.d/atlas.conf-atlas-tmp
-	    chmod 0644 /etc/ld.so.conf.d/atlas.conf-atlas-tmp
-	    mv /etc/ld.so.conf.d/atlas.conf-atlas-tmp /etc/ld.so.conf.d/atlas.conf
-	fi
-    fi    
+    if ! grep -q '^/usr/lib/atlas$' /etc/ld.so.conf.d/atlas.conf ; then
+	echo /usr/lib/atlas >> /etc/ld.so.conf.d/atlas.conf
+    fi
 fi
 
 #DEBHELPER#
