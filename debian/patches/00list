@@ -4,3 +4,4 @@
 04_static_install_target.dpatch
 05_shared_full_blas.dpatch
 06_install_shared.dpatch
+07_full_sonames.dpatch
