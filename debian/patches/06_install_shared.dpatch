@@ -1,0 +1,83 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 06_install_shared.dpatch by  <david@evans>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad atlas-3.8.3~/Make.top atlas-3.8.3/Make.top
+--- atlas-3.8.3~/Make.top	2009-08-23 01:02:38.000000000 -0700
++++ atlas-3.8.3/Make.top	2009-08-23 01:02:50.000000000 -0700
+@@ -17,6 +17,8 @@
+ 	cd bin/ ; ./xatlas_install $(INSTFLAGS)
+ 	cd lib/ ; $(MAKE) atlas/libblas.a
+ 	cd lib/ ; $(MAKE) atlas/liblapack.a
++	cd lib/ ; $(MAKE) shared
++	cd lib/ ; $(MAKE) fullshared
+ time: 
+ 	./xatlbench -dc $(BLDdir)/bin/INSTALL_LOG -dp $(BLDdir)/ARCHS/$(ARCH)
+ C_sanity_test:
+@@ -308,3 +310,12 @@
+ 	- cp $(LIBdir)/libptf77blas.a $(INSTdir)/.
+ 	- chmod 0644 $(INSTdir)/libptcblas.a $(INSTdir)/libptf77blas.a
+ 
++install_shared_lib:
++	for lib in atlas cblas f77blas lapack_atlas; do \
++		cp $(LIBdir)/lib$$lib.so $(INSTdir)/. ; \
++		chmod 0644 $(INSTdir)/lib$$lib.so ;\
++	done;
++	for lib in blas lapack; do \
++		cp $(LIBdir)/atlas/lib$$lib.so $(INSTdir)/atlas/. ; \
++		chmod 0644 $(INSTdir)/atlas/lib$$lib.so ;\
++	done;
+diff -urNad atlas-3.8.3~/makes/Make.lib atlas-3.8.3/makes/Make.lib
+--- atlas-3.8.3~/makes/Make.lib	2009-08-23 01:02:38.000000000 -0700
++++ atlas-3.8.3/makes/Make.lib	2009-08-23 01:07:13.000000000 -0700
+@@ -36,8 +36,11 @@
+ 	$(MAKE) libatlas.so liblapack_atlas.so libptf77blas.so libf77blas.so \
+                 libptcblas.so libcblas.so liblapack_atlas.so
+ shared :
+-	- rm -f libatlas.so liblapack_atlas.so
++	- rm -f libatlas.so liblapack_atlas.so libf77blas.so libcblas.so liblapack_atlas.so
+ 	$(MAKE) libatlas.so liblapack_atlas.so libf77blas.so libcblas.so liblapack_atlas.so
++fullshared :
++	- rm -f atlas/libblas.so atlas/liblapack.so
++	$(MAKE) atlas/libblas.so atlas/liblapack.so
+ cptshared :
+ 	- rm -f libatlas.so libclapack_atlas.so
+ 	$(MAKE) libatlas.so libclapack_atlas.so libptcblas.so libcblas.so
+@@ -48,22 +51,26 @@
+ libatlas.so : libatlas.a
+ 	ld $(LDFLAGS) -shared -soname libatlas.so -o libatlas.so \
+         --whole-archive libatlas.a --no-whole-archive -lc $(LIBS)
+-liblapack_atlas.so : liblapack_atlas.a
+-	ld $(LDFLAGS) -shared -soname $@ -o $@ --whole-archive \
+-           liblapack_atlas.a --no-whole-archive $(F77SYSLIB)
++liblapack_atlas.so : liblapack_atlas.a libatlas.so libcblas.so libf77blas.so
++	ld $(LDFLAGS) -shared -soname $@ -o $@ \
++	  --whole-archive liblapack_atlas.a  \
++	  --no-whole-archive -L. -lf77blas -lcblas -latlas -lm -c $(F77SYSLIB)
+ libclapack_atlas.so : libclapack_atlas.a
+ 	ld $(LDFLAGS) -shared -soname liblapack_atlas.so -o liblapack_atlas.so \
+            --whole-archive libclapack_atlas.a
+ libptf77blas.so : libptf77blas.a
+ 	ld $(LDFLAGS) -shared -soname $@ -o $@ --whole-archive libptf77blas.a \
+            --no-whole-archive $(F77SYSLIB)
+-libf77blas.so : libf77blas.a
+-	ld $(LDFLAGS) -shared -soname $@ -o $@ --whole-archive libf77blas.a \
+-           --no-whole-archive $(F77SYSLIB)
++libf77blas.so : libf77blas.a libcblas.so libatlas.so
++	ld $(LDFLAGS) -shared -soname $@ -o $@ \
++	  --whole-archive libf77blas.a \
++          --no-whole-archive -L. -lcblas -latlas $(F77SYSLIB) -lm -lc
+ libptcblas.so : libptcblas.a
+ 	ld $(LDFLAGS) -shared -soname $@ -o $@ --whole-archive libptcblas.a
+-libcblas.so : libcblas.a
+-	ld $(LDFLAGS) -shared -soname $@ -o $@ --whole-archive libcblas.a
++libcblas.so : libcblas.a libatlas.so
++	ld $(LDFLAGS) -shared -soname $@ -o $@ \
++	  --whole-archive libcblas.a \
++          --no-whole-archive -L. -latlas $(F77SYSLIB) -lm -lc
+ 
+ # Build full netlib blas/lapack libraries:
+ atlas/libblas.a: libatlas.a libf77blas.a libcblas.a
