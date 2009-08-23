@@ -1,0 +1,12 @@
+debian/tmp/usr/lib/sse/atlas/libblas.so.3gf
+debian/tmp/usr/lib/sse/atlas/libblas.so.3gf.0
+debian/tmp/usr/lib/sse/atlas/liblapack.so.3gf
+debian/tmp/usr/lib/sse/atlas/liblapack.so.3gf.0
+debian/tmp/usr/lib/sse/libatlas.so.3gf
+debian/tmp/usr/lib/sse/libatlas.so.3gf.0
+debian/tmp/usr/lib/sse/libcblas.so.3gf
+debian/tmp/usr/lib/sse/libcblas.so.3gf.0
+debian/tmp/usr/lib/sse/libf77blas.so.3gf
+debian/tmp/usr/lib/sse/libf77blas.so.3gf.0
+debian/tmp/usr/lib/sse/liblapack_atlas.so.3gf
+debian/tmp/usr/lib/sse/liblapack_atlas.so.3gf.0

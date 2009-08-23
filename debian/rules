@@ -36,7 +36,7 @@ F77=gfortran
 
 ARCHT:=$(shell echo $$(dpkg-architecture -qDEB_HOST_ARCH_CPU))
 #SA:=$(notdir $(wildcard debian/$(ARCHT)/*))
-SA:=base
+SA:=sse
 
 BUILD:=BUILD
 BUILDDIR:=$(BUILD)-$(ARCHT)
@@ -108,7 +108,7 @@ $(BUILDDIR)-%-static/configure: debian/$(ARCHT)/%/ patch
 configure: configure-stamp
 
 configure-stamp:
-	for a in PII32; do \
+	for a in PII32 PIII32SSE1; do \
 		cp debian/ARCHS/$$a.tgz.uu CONFIG/ARCHS; \
 		(cd CONFIG/ARCHS && uudecode $$a.tgz.uu); \
 	done;
