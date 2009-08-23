@@ -113,7 +113,7 @@ configure-stamp:
 		(cd CONFIG/ARCHS && uudecode $$a.tgz.uu); \
 	done;
 	@for arch in $(SA); do \
-		$(MAKE) -f ./debian/rules $(BUILDDIR)-$$arch-static/configure; \
+		$(MAKE) -f ./debian/rules $(BUILDDIR)-$$arch-shared/configure; \
 	done
 	touch $@
 
@@ -125,7 +125,7 @@ build-arch: build-arch-stamp
 build-arch-stamp: configure-stamp
 	dh_testdir
 	for arch in $(SA); do \
-		(cd $(BUILDDIR)-$$arch-static && make);  \
+		(cd $(BUILDDIR)-$$arch-shared && make);  \
 	done
 	touch $@
 
@@ -144,7 +144,9 @@ install-arch-stamp: build
 	dh_clean -k -i 
 	dh_installdirs -i
 	for arch in $(SA); do \
-		(cd $(BUILDDIR)-$$arch-static && make install); \
+		(cd $(BUILDDIR)-$$arch-shared && make install_headers); \
+		(cd $(BUILDDIR)-$$arch-shared && make install_static_lib); \
+		(cd $(BUILDDIR)-$$arch-shared && make install_shared_lib); \
 	done
 	touch $@
 
