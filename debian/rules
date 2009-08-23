@@ -145,8 +145,8 @@ install-arch-stamp: build
 	dh_installdirs -i
 	for arch in $(SA); do \
 		(cd $(BUILDDIR)-$$arch-shared && make install_headers); \
-		(cd $(BUILDDIR)-$$arch-shared && make install_static_lib); \
-		(cd $(BUILDDIR)-$$arch-shared && make install_shared_lib); \
+		(cd $(BUILDDIR)-$$arch-shared && make install_static); \
+		(cd $(BUILDDIR)-$$arch-shared && make install_shared); \
 	done
 	touch $@
 
@@ -191,7 +191,7 @@ binary-arch: install
 	dh_installdeb -s
 	#dh_shlibdeps -s -Llibatlas3gf-base -l$$(pwd)/$(BDIR):$$(pwd)/$(LDIR):debian/libatlas3gf-base/usr/lib
 	#for i in $(SA); do dh_shlibdeps -p libatlas3gf-$$i -Llibatlas3gf-$$i -l$$(pwd)/$(BDIR):$$(pwd)/$(LDIR):debian/libatlas3gf-$$i/usr/lib/$$i:debian/libatlas3gf-$$i/usr/lib ; done
-	chmod +x debian/fixshlibs && debian/fixshlibs
+	#chmod +x debian/fixshlibs && debian/fixshlibs
 	#dh_gencontrol -s -u"-Vlibs:Suggests=$$(echo $(addprefix libatlas3gf-,$(filter-out base,$(SA))) | sed 's/ /,/g')"
 	dh_gencontrol -s
 	dh_md5sums -s
