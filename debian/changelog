@@ -1,3 +1,10 @@
+atlas (3.8.3-1ubuntu1~scipy~ppa1) jaunty; urgency=low
+
+  [ David Cournapeau ]
+  * Ubuntu upload
+
+ -- David Cournapeau <david@ar.media.kyoto-u.ac.jp>  Sun, 23 Aug 2009 11:58:39 -0700
+
 atlas (3.8.3-1) unstable; urgency=low
 
   [ David Cournapeau ]
