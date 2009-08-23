@@ -6,8 +6,8 @@
 
 @DPATCH@
 diff -urNad atlas-3.8.3~/CONFIG/src/Makefile atlas-3.8.3/CONFIG/src/Makefile
---- atlas-3.8.3~/CONFIG/src/Makefile	2009-08-23 09:24:20.000000000 -0700
-+++ atlas-3.8.3/CONFIG/src/Makefile	2009-08-23 09:25:00.000000000 -0700
+--- atlas-3.8.3~/CONFIG/src/Makefile	2009-08-23 10:30:12.000000000 -0700
++++ atlas-3.8.3/CONFIG/src/Makefile	2009-08-23 10:30:13.000000000 -0700
 @@ -370,6 +370,13 @@
  install : $(INCINSTdir) $(LIBINSTdir) $(INCINSTdir)/atlas $(LIBINSTdir)/atlas
  	$(MAKE) -f Make.top install_inc INSTdir=$(INCINSTdir) 
@@ -23,8 +23,8 @@ diff -urNad atlas-3.8.3~/CONFIG/src/Makefile atlas-3.8.3/CONFIG/src/Makefile
  confclean:
  	rm -f *core* *.o config?.out
 diff -urNad atlas-3.8.3~/Make.top atlas-3.8.3/Make.top
---- atlas-3.8.3~/Make.top	2009-08-23 09:24:20.000000000 -0700
-+++ atlas-3.8.3/Make.top	2009-08-23 09:24:20.000000000 -0700
+--- atlas-3.8.3~/Make.top	2009-08-23 10:30:13.000000000 -0700
++++ atlas-3.8.3/Make.top	2009-08-23 10:30:13.000000000 -0700
 @@ -288,6 +288,7 @@
  	touch include/dXover.h
  	touch include/sXover.h
@@ -55,8 +55,8 @@ diff -urNad atlas-3.8.3~/Make.top atlas-3.8.3/Make.top
 +		chmod 0644 $(INSTdir)/atlas/lib$$lib.so.3gf.0 ;\
  	done;
 diff -urNad atlas-3.8.3~/makes/Make.lib atlas-3.8.3/makes/Make.lib
---- atlas-3.8.3~/makes/Make.lib	2009-08-23 09:24:20.000000000 -0700
-+++ atlas-3.8.3/makes/Make.lib	2009-08-23 09:24:20.000000000 -0700
+--- atlas-3.8.3~/makes/Make.lib	2009-08-23 10:30:13.000000000 -0700
++++ atlas-3.8.3/makes/Make.lib	2009-08-23 10:32:44.000000000 -0700
 @@ -1,12 +1,12 @@
  include Make.inc
  mySRCdir = $(SRCdir)/lib
@@ -115,19 +115,19 @@ diff -urNad atlas-3.8.3~/makes/Make.lib atlas-3.8.3/makes/Make.lib
 +
 +atlas/libblas.so: atlas/libblas.so.3gf
 +	rm -f $@
-+	ln -s $< $@ 
++	(cd atlas && ln -s libblas.so.3gf libblas.so)
 +
 +atlas/libblas.so.3gf: atlas/libblas.so.3gf.0
 +	rm -f $@
-+	ln -s $< $@ 
++	(cd atlas && ln -s libblas.so.3gf.0 libblas.so.3gf)
 +
 +atlas/liblapack.so: atlas/liblapack.so.3gf
 +	rm -f $@
-+	ln -s $< $@ 
++	(cd atlas && ln -s liblapack.so.3gf liblapack.so)
 +
 +atlas/liblapack.so.3gf: atlas/liblapack.so.3gf.0
 +	rm -f $@
-+	ln -s $< $@ 
++	(cd atlas && ln -s liblapack.so.3gf.0 liblapack.so.3gf)
 +
 +# Build rules
  ptshared :
