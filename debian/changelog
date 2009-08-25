@@ -1,4 +1,4 @@
-atlas (3.8.3-3) UNRELEASED; urgency=low
+atlas (3.8.3-3) unstable; urgency=low
 
   [ David Cournapeau ]
   * Fix files list for sse2 build
