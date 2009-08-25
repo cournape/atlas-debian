@@ -62,7 +62,7 @@ preparebuild.status:
 
 # Get the gfortran runtime path since atlas configure get it wrong when we call
 # it from make
-F77SYSLIB:=-L$(shell dirname `$(F77) -print-file-name=libgfortran.so`) -lgfortran
+F77SYSLIB:=-L$(shell dirname `$(F77) -print-file-name=libgfortran.so`) -lgfortran -lm -lgcc_s -lgcc
 
 #
 # Configure stage

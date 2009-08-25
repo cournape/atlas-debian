@@ -1,19 +1,20 @@
-atlas (3.8.3-3) unstable; urgency=low
+atlas (3.8.3-1) UNRELEASED; urgency=low
 
   [ David Cournapeau ]
   * Fix files list for sse2 build
   * Fix sonames of full BLAS/LAPACK
+  * Fix missing link to gcc runtime for fortran code
 
  -- David Cournapeau <david@ar.media.kyoto-u.ac.jp>  Tue, 25 Aug 2009 09:11:47 -0700
 
-atlas (3.8.3-2) unstable; urgency=low
+atlas (3.8.3-1) UNRELEASED; urgency=low
 
   [ David Cournapeau ]
   * Add amd64 support
 
  -- David Cournapeau <david@ar.media.kyoto-u.ac.jp>  Tue, 25 Aug 2009 06:59:17 -0700
 
-atlas (3.8.3-1) unstable; urgency=low
+atlas (3.8.3-1) UNRELEASED; urgency=low
 
   [ David Cournapeau ]
   * Start working on new build for ATLAS, based on 3.8.3.
