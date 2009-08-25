@@ -1,3 +1,10 @@
+atlas (3.8.3-2) unstable; urgency=low
+
+  [ David Cournapeau ]
+  * Add amd64 support
+
+ -- David Cournapeau <david@ar.media.kyoto-u.ac.jp>  Tue, 25 Aug 2009 06:59:17 -0700
+
 atlas (3.8.3-1) unstable; urgency=low
 
   [ David Cournapeau ]
