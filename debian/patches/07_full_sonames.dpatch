@@ -6,8 +6,8 @@
 
 @DPATCH@
 diff -urNad atlas-3.8.3~/CONFIG/src/Makefile atlas-3.8.3/CONFIG/src/Makefile
---- atlas-3.8.3~/CONFIG/src/Makefile	2009-08-23 10:30:12.000000000 -0700
-+++ atlas-3.8.3/CONFIG/src/Makefile	2009-08-23 10:30:13.000000000 -0700
+--- atlas-3.8.3~/CONFIG/src/Makefile	2009-08-25 08:09:25.000000000 -0700
++++ atlas-3.8.3/CONFIG/src/Makefile	2009-08-25 08:09:26.000000000 -0700
 @@ -370,6 +370,13 @@
  install : $(INCINSTdir) $(LIBINSTdir) $(INCINSTdir)/atlas $(LIBINSTdir)/atlas
  	$(MAKE) -f Make.top install_inc INSTdir=$(INCINSTdir) 
@@ -23,8 +23,8 @@ diff -urNad atlas-3.8.3~/CONFIG/src/Makefile atlas-3.8.3/CONFIG/src/Makefile
  confclean:
  	rm -f *core* *.o config?.out
 diff -urNad atlas-3.8.3~/Make.top atlas-3.8.3/Make.top
---- atlas-3.8.3~/Make.top	2009-08-23 10:30:13.000000000 -0700
-+++ atlas-3.8.3/Make.top	2009-08-23 10:30:13.000000000 -0700
+--- atlas-3.8.3~/Make.top	2009-08-25 08:09:25.000000000 -0700
++++ atlas-3.8.3/Make.top	2009-08-25 08:09:26.000000000 -0700
 @@ -288,6 +288,7 @@
  	touch include/dXover.h
  	touch include/sXover.h
@@ -55,8 +55,8 @@ diff -urNad atlas-3.8.3~/Make.top atlas-3.8.3/Make.top
 +		chmod 0644 $(INSTdir)/atlas/lib$$lib.so.3gf.0 ;\
  	done;
 diff -urNad atlas-3.8.3~/makes/Make.lib atlas-3.8.3/makes/Make.lib
---- atlas-3.8.3~/makes/Make.lib	2009-08-23 10:30:13.000000000 -0700
-+++ atlas-3.8.3/makes/Make.lib	2009-08-23 10:32:44.000000000 -0700
+--- atlas-3.8.3~/makes/Make.lib	2009-08-25 08:09:25.000000000 -0700
++++ atlas-3.8.3/makes/Make.lib	2009-08-25 08:11:25.000000000 -0700
 @@ -1,12 +1,12 @@
  include Make.inc
  mySRCdir = $(SRCdir)/lib
@@ -202,14 +202,14 @@ diff -urNad atlas-3.8.3~/makes/Make.lib atlas-3.8.3/makes/Make.lib
 -atlas/libblas.so: atlas/libblas.a libatlas.so
 -	ld $(LDFLAGS) -shared -soname libblas.so -o $@ \
 +atlas/libblas.so.3gf.0: atlas/libblas.a libatlas.so
-+	ld $(LDFLAGS) -shared -soname libblas.so.3gf.0 -o $@ \
++	ld $(LDFLAGS) -shared -soname libblas.so.3gf -o $@ \
  	   --whole-archive atlas/libblas.a \
             --no-whole-archive $(F77SYSLIB) -lm -lc
  
 -atlas/liblapack.so: atlas/liblapack.a atlas/libblas.so
 -	ld $(LDFLAGS) -shared -soname liblapack.so -o $@ \
 +atlas/liblapack.so.3gf.0: atlas/liblapack.a atlas/libblas.so
-+	ld $(LDFLAGS) -shared -soname liblapack.so.3gf.0 -o $@ \
++	ld $(LDFLAGS) -shared -soname liblapack.so.3gf -o $@ \
  	   --whole-archive atlas/liblapack.a \
             --no-whole-archive -L . -lblas $(F77SYSLIB) -lm -lc
  #

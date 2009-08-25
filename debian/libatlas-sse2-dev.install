@@ -1,0 +1,12 @@
+debian/tmp/usr/lib/sse2/libatlas.so
+debian/tmp/usr/lib/sse2/libcblas.so
+debian/tmp/usr/lib/sse2/libf77blas.so
+debian/tmp/usr/lib/sse2/liblapack_atlas.so
+debian/tmp/usr/lib/sse2/atlas/libblas.so
+debian/tmp/usr/lib/sse2/atlas/liblapack.so
+debian/tmp/usr/lib/sse2/libatlas.a
+debian/tmp/usr/lib/sse2/libcblas.a
+debian/tmp/usr/lib/sse2/libf77blas.a
+debian/tmp/usr/lib/sse2/liblapack_atlas.a
+debian/tmp/usr/lib/sse2/atlas/libblas.a
+debian/tmp/usr/lib/sse2/atlas/liblapack.a
